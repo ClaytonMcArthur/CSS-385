@@ -1,0 +1,3 @@
+# Inspiration
+
+I am inspired to recreate a game I have created in the past. I created a game called *Welcome to the Cave*; this game was a text based dungeon crawler/rpg built in BASIC. This game looked like it was created in the 70’s and had a lot of unique ASCII art. I would like to modernize this game and recreate a dungeon crawler/rpg that has monsters, items, and art that has a PEDIT 5 “vibe” but with modern game mechanics.
