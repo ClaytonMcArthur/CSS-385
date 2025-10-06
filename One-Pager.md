@@ -55,11 +55,11 @@ Balance is exemplified by Chess or CSGO. These games are highly competitive, whe
 It is important to have game balance in competitive games like Apex Legends or Valorant. These games are designed to test player skill and do not offer unfair advantages for seasoned players in-game. Games like Destiny or Terraria are not as balanced because they are designed to reward players who put in time to level up or gain new gear.
 
 # Sources Cited
-1. https://elvtr.com/blog/the-fundamentals-of-game-design
-2. https://www.juegostudio.com/blog/game-design-principles-every-game-designer-should-know
-3. https://gmtk.substack.com/p/the-100-games-that-taught-me-game
+1. <a href="https://elvtr.com/blog/the-fundamentals-of-game-design" target="_blank" rel="noopener noreferrer">https://elvtr.com/blog/the-fundamentals-of-game-design</a>
+2. <a href="https://www.juegostudio.com/blog/game-design-principles-every-game-designer-should-know" target="_blank" rel="noopener noreferrer">https://www.juegostudio.com/blog/game-design-principles-every-game-designer-should-know</a>
+3. <a href="https://gmtk.substack.com/p/the-100-games-that-taught-me-game" target="_blank" rel="noopener noreferrer">https://gmtk.substack.com/p/the-100-games-that-taught-me-game</a>
 
 # AI Use
 I used AI to help format the .md file, use stronger verbs, and spell check the document.
-Link to AI thread:https://chatgpt.com/share/68e35704-5474-8010-8174-143b89ff3071
+Link to AI thread:<a href="[https://chatgpt.com/share/68e35704-5474-8010-8174-143b89ff3071](https://chatgpt.com/share/68e35704-5474-8010-8174-143b89ff3071)" target="_blank" rel="noopener noreferrer">[https://chatgpt.com/share/68e35704-5474-8010-8174-143b89ff3071](https://chatgpt.com/share/68e35704-5474-8010-8174-143b89ff3071)</a>
 
