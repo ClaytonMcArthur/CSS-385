@@ -8,6 +8,7 @@ Most RPGs have aspects of player progression, but I think Destiny and Destiny 2 
 1. Keeps players engaged
 2. Always new game content to unlock
 3. Keeps the game accessable for new and vetren players
+
 -Cons
 1. Games take a long time to reach end content
 2. Can be daunting for casual players
@@ -24,6 +25,7 @@ A great example of "Engaging Core Mechanics" is Jump King. The developers spent 
 1. Keeps the game simple for users
 2. The core mechanic(s) are highly polished
 3. Helps keep game objectives straightforward
+   
 -Cons
 1. Game often lack complexity
 2. Game can feel repetiative
@@ -40,6 +42,7 @@ A great example of "Balance" is Chess or CSGO. These games are highly competive 
 1. Keep games fair
 2. Allow new players to vs vetren players
 3. Keeps players engaged with stratigy
+   
 -Cons
 1. Games can lack content
 2. Games feel repetiative
