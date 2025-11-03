@@ -1,47 +1,52 @@
 # One-Pager: Performance Plan — Cipher of the Deep (Top-Down 2D Dungeon RPG)
 
 ## 1) Likely performance pain points
-1. **Rendering pressure (overdraw + draw calls)**  
-   Dense tilemaps, layered sprites/FX, and transparency drive overdraw; many materials/textures increase draw calls. Use batching/atlases and watch overdraw hotspots.
+1. **Screen drawing load**  
+   When lots of tiles, effects, and transparent sprites are on screen, the game ends up “drawing” the same pixels many times. Switching between many small images also slows things down.
 
-2. **Collision & pathfinding scale**  
-   Naive collision checks and frequent A* on fine grids scale poorly; broad-phase spatial partitioning (grid/quadtree) and coarser nav graphs reduce work.
+2. **Collisions and pathfinding growing fast**  
+   If every enemy checks itself against everything nearby and constantly searches for paths through a detailed grid, work adds up quickly as the room gets busier.
 
-3. **Update frequency & object lifetime churn**  
-   Ticking every entity every frame and constantly allocating/destroying short-lived objects (projectiles/FX) causes CPU & GC spikes; object pooling and fixed-timestep simulation stabilize performance.
+3. **Too many updates and short-lived objects**  
+   Updating every enemy every frame and repeatedly creating/destroying things like projectiles and particles can cause hiccups and brief slowdowns.
 
 ---
 
-## 2) Common mitigation strategies
+## 2) Common ways to fix or reduce these
 
-### A. Rendering
-- **Sprite batching + texture atlases** to cut draw calls; **tilemap chunking + camera/frustum culling** to avoid drawing unseen tiles; audit **overdraw** with tooling and prefer opaque layers where possible.
+### A. Rendering (what’s drawn on screen)
+- **Group images together** so the game switches less between files, and **draw only what the camera can see** by splitting the map into chunks.
+- **Keep layers simple** where possible and limit heavy full-screen effects; use tools to spot areas that are being redrawn more than needed.
 
-### B. Collision & Pathfinding
-- **Spatial partitioning** (uniform grid or quadtree) for broad-phase; **AABB first** before narrow-phase; **coarser nav-graphs** and **path budgets** (cap nodes/frame, reuse paths).
+### B. Collisions & Pathfinding (movement and “can I hit this?”)
+- **Check nearby areas first** using a simple grid so characters don’t test against the whole room.
+- **Use quick “box” checks** before any precise checks.
+- **Plan routes on a coarser grid** and **limit how often paths are recalculated**, reusing recent results when possible.
 
-### C. Updates & Object Lifetimes
-- **Tick decimation/LOD** for off-screen actors; **object pooling** for projectiles/FX; **fixed timestep** physics with visual interpolation to smooth frames.
+### C. Updates & Object Lifetimes (what runs each frame)
+- **Update off-screen or low-priority enemies less often** and pause distant rooms.
+- **Reuse common objects** (like bullets and particle effects) instead of creating new ones each time.
+- **Run movement/physics on a steady rhythm** and smooth the visuals in between to keep frames even.
 
 ---
 
 ## 3) How I’ll apply this to Cipher of the Deep
-**Goal:** Hold **120 FPS (8.3 ms)** on my dev machine and **60 FPS (16.7 ms)** on mid-range laptops while traversing a 4-room dungeon with 12 enemies + light FX.
+**Goal:** Stay near **120 FPS (8.3 ms)** on my dev machine and **60 FPS (16.7 ms)** on mid-range laptops while moving through a 4-room dungeon with ~12 active enemies and light effects.
 
 ### A. Rendering plan
-- One **atlas per theme** (UI/characters/environment).  
-- Convert tilemap to **32×32 tile chunks**; render only chunks in/near camera.  
-- Cap **particles ≤ 60**; prefer per-sprite glow over full-screen post.  
-**Acceptance:** GPU frame < 5 ms; **≥50%** fewer draw calls vs baseline.
+- Use **one image atlas per theme** (UI, characters, environment).
+- Split the tilemap into **32×32-tile chunks** and **draw only the chunks near the camera**.
+- **Limit on-screen particles to about 60**; favor small per-sprite glows over heavy full-screen effects.  
+**Success check:** Screen drawing time under ~5 ms in the test scene, with at least **50% fewer draw calls** than the starting point.
 
 ### B. Collision & pathfinding plan
-- **Uniform spatial grid** (cell ≈ largest enemy).  
-- Query only 9 neighboring cells; **A\*** on **coarse nav-grid** (e.g., 1 node per 2×2 tiles).  
-- **Budget:** ≤1 recompute/enemy every 0.25 s; global cap **2 A\*** jobs/frame.  
-**Acceptance:** AI step < 3 ms; spikes < 6 ms during swarms.
+- Use a **simple grid** sized to the biggest enemy so checks stay local.
+- Only check **the current cell and the 8 neighbors** for collisions.
+- Do pathfinding on a **coarser grid** and **space out recalculations** (about once every 0.25 s per enemy; at most two path jobs per frame).  
+**Success check:** AI work usually under ~3 ms, with short spikes under ~6 ms when things get busy.
 
 ### C. Updates & churn plan
-- **Decimate updates**: off-screen at ~10 Hz; on-screen at 30–60 Hz under load.  
-- **Pool** projectiles, damage text, particle emitters.  
-- **Fixed timestep** (e.g., 50–60 Hz) + visual interpolation.  
-**Acceptance:** Allocation < 0.5 MB/min; **no GC spikes > 2 ms**.
+- **Slow down updates** for things off-screen (~10 times per second) and keep on-screen updates between **30–60 times per second** depending on load.
+- **Reuse** projectiles, damage numbers, and common particle effects from pools.
+- Run movement/physics on a **steady step** (around 50–60 times per second) and **smooth visuals** between steps.  
+**Success check:** Memory growth under **~0.5 MB per minute** and **no visible stutters** from cleanup.
